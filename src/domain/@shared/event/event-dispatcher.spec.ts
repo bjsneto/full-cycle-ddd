@@ -8,7 +8,7 @@ import Address from "../../customer/value-object/address";
 import EnviaConsoleLog2Handler from "../../customer/event/enviar-console-log2-handler";
 import EnviaConsoleLogHandler from "../../customer/event/enviar-console-log-handler";
 import Product from "../../product/entity/product";
-import CustomerEditAddress from "../../customer/event/customer-edit-address.event";
+import CustomerEditAddressEvent from "../../customer/event/customer-edit-address.event";
 
 describe("Domain events tests", () => {
   it("should register an event handler", () => {
@@ -116,17 +116,17 @@ describe("Domain events tests", () => {
     const eventDispatcher = new EventDispatcher();
     const eventHandler = new EnviaConsoleLogHandler();
     const spyEventHandler = jest.spyOn(eventHandler, "handle");
-    eventDispatcher.register("CustomerEditAddress", eventHandler);
+    eventDispatcher.register("CustomerEditAddressEvent", eventHandler);
 
     expect(
-      eventDispatcher.getEventHandlers["CustomerEditAddress"][0]
+      eventDispatcher.getEventHandlers["CustomerEditAddressEvent"][0]
     ).toMatchObject(eventHandler);
 
     const customer = new Customer("1", "Belarmino");
     const address = new Address("Bela Vista", 123, "13330-250", "São Paulo");
     customer.changeAddress(address);
 
-    const customerEditAddressEvent = new CustomerEditAddress(customer);
+    const customerEditAddressEvent = new CustomerEditAddressEvent(customer);
     eventDispatcher.notify(customerEditAddressEvent);
     expect(spyEventHandler).toHaveBeenCalled();
   });
